@@ -22,8 +22,8 @@ class App():
 
     def __init__(self):
         self.stdin_path = '/dev/null'
-        self.stdout_path = '/dev/null'
-        #self.stdout_path = base_directory + '/screepsstats.out'
+        #self.stdout_path = '/dev/null'
+        self.stdout_path = base_directory + '/screepsstats.out'
         self.stderr_path = base_directory + '/screepsstats.err'
         self.pidfile_path =  base_directory + '/screepsstats.pid'
         self.pidfile_timeout = 5
@@ -61,7 +61,7 @@ class WebsocketProcess(multiprocessing.Process):
         logger = logging.getLogger("ScreepsStats")
         logger.setLevel(logging.WARN)
         settings = getSettings()
-        screepsconsole = ScreepsConsole(user=settings['screeps_username'], password=settings['screeps_password'], ptr=settings['screeps_ptr'])
+        screepsconsole = ScreepsConsole(user=settings['screeps_username'], password=settings['screeps_password'], ptr=settings['screeps_ptr'], host=settings['host'], secure=settings['secure'])
         screepsconsole.start()
 
 
@@ -72,7 +72,7 @@ class APIProcess(multiprocessing.Process):
         logger = logging.getLogger("ScreepsStats")
         logger.setLevel(logging.WARN)
         settings = getSettings()
-        screepsapi = ScreepsMemoryStats(u=settings['screeps_username'], p=settings['screeps_password'], ptr=settings['screeps_ptr'])
+        screepsapi = ScreepsMemoryStats(u=settings['screeps_username'], p=settings['screeps_password'], ptr=settings['screeps_ptr'], host=settings['host'], secure=settings['secure'])
         screepsapi.run_forever()
 
 

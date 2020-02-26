@@ -19,7 +19,7 @@ class ScreepsMemoryStats():
     ELASTICSEARCH_HOST = 'elasticsearch' if 'ELASTICSEARCH' in os.environ else 'localhost'
     es = Elasticsearch([ELASTICSEARCH_HOST])
 
-    def __init__(self, u=None, p=None, ptr=False):
+    def __init__(self, u=None, p=None, ptr=False, host=None, secure=True):
         self.user = u
         self.password = p
         self.ptr = ptr
@@ -28,7 +28,7 @@ class ScreepsMemoryStats():
     def getScreepsAPI(self):
         if not self.__api:
             settings = getSettings()
-            self.__api = screepsapi.API(u=settings['screeps_username'],p=settings['screeps_password'],ptr=settings['screeps_ptr'])
+            self.__api = screepsapi.API(u=settings['screeps_username'],p=settings['screeps_password'],ptr=settings['screeps_ptr'], host=settings["host"], secure=settings["secure"])
         return self.__api
     __api = False
 
@@ -241,7 +241,7 @@ class ScreepsMemoryStats():
                     self.es.index(index=indexname, doc_type="stats", body=savedata)
             confirm_queue.append(tick)
 
-        self.confirm(confirm_queue)
+        self.confirm(confirm_queue, shard)
 
     def confirm(self, ticks, shard):
         javascript_clear = 'Stats.removeTick(' + json.dumps(ticks, separators=(',',':')) + ');'
