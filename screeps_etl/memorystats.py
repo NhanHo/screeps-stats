@@ -179,7 +179,7 @@ class ScreepsMemoryStats():
 
     def collectMemoryStats(self, shard):
         screeps = self.getScreepsAPI()
-        stats = screeps.memory(path='___screeps_stats')
+        stats = screeps.memory(path='___screeps_stats', shard=shard)
         if 'data' not in stats:
             return False
 
