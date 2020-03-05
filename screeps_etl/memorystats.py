@@ -150,10 +150,9 @@ class ScreepsMemoryStats():
         if self.es.exists(index=indexname, doc_type="fees", id=order['id']):
             return False
         else:
+            order['timestamp'] = order['date']
             self.es.index(index=indexname,
                           doc_type="fees",
-                          id=order['id'],
-                          timestamp=order['date'],
                           body=order)
             print("Saving order (fee) %s" % (order['id'],))
             return True
@@ -170,10 +169,9 @@ class ScreepsMemoryStats():
         if self.es.exists(index=indexname, doc_type="orders", id=order['id']):
             return False
         else:
+            order['timestamp'] = order['data']
             self.es.index(index=indexname,
                           doc_type="orders",
-                          id=order['id'],
-                          timestamp=order['date'],
                           body=order)
             print("Saving order (deal) %s" % (order['id'],))
             return True
