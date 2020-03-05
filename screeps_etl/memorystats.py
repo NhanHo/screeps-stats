@@ -169,7 +169,7 @@ class ScreepsMemoryStats():
         if self.es.exists(index=indexname, doc_type="orders", id=order['id']):
             return False
         else:
-            order['timestamp'] = order['data']
+            order['timestamp'] = order['date']
             self.es.index(index=indexname,
                           doc_type="orders",
                           body=order)
