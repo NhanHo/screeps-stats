@@ -150,10 +150,9 @@ class ScreepsMemoryStats():
         if self.es.exists(index=indexname, doc_type="fees", id=order['id']):
             return False
         else:
+            order['timestamp'] = order['date']
             self.es.index(index=indexname,
                           doc_type="fees",
-                          id=order['id'],
-                          timestamp=order['date'],
                           body=order)
             print("Saving order (fee) %s" % (order['id'],))
             return True
@@ -170,10 +169,9 @@ class ScreepsMemoryStats():
         if self.es.exists(index=indexname, doc_type="orders", id=order['id']):
             return False
         else:
+            order['timestamp'] = order['date']
             self.es.index(index=indexname,
                           doc_type="orders",
-                          id=order['id'],
-                          timestamp=order['date'],
                           body=order)
             print("Saving order (deal) %s" % (order['id'],))
             return True
@@ -181,7 +179,7 @@ class ScreepsMemoryStats():
 
     def collectMemoryStats(self, shard):
         screeps = self.getScreepsAPI()
-        stats = screeps.memory(path='___screeps_stats')
+        stats = screeps.memory(path='___screeps_stats', shard=shard)
         if 'data' not in stats:
             return False
 
