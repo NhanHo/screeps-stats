@@ -51,7 +51,7 @@ class App():
                 apiprocess.daemon = True
                 apiprocess.start()
 
-            time.sleep(3)
+            time.sleep(65)
 
 
 class WebsocketProcess(multiprocessing.Process):
