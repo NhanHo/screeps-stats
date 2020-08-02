@@ -249,10 +249,10 @@ class ScreepsMemoryStats():
                     })
                     #self.es.index(index=indexname, doc_type="stats", body=savedata)
                 data_by_indices[indexname] = docs
-            for (indexname, docs) in data_by_indices.items():
-                helpers.bulk(self.es, docs)
             confirm_queue.append(tick)
 
+        for (indexname, docs) in data_by_indices.items():
+            helpers.bulk(self.es, docs)
         self.confirm(confirm_queue, shard)
 
     def confirm(self, ticks, shard):
