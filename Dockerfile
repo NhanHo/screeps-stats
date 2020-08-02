@@ -1,7 +1,7 @@
-FROM python:2.7
-MAINTAINER patryk.perduta@gmail.com
+FROM python:3.8
+MAINTAINER nhanho0105@gmail.com
 
-RUN git clone https://github.com/NhanHo/screeps-stats /screeps-stats
+COPY . /screeps-stats
 COPY .screeps_settings.yaml /screeps-stats
 WORKDIR /screeps-stats
 RUN pip install -r requirements.txt

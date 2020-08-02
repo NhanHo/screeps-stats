@@ -57,7 +57,7 @@ class ScreepsMemoryStats():
                     continue
 
             lastrun += 1
-            time.sleep(7)
+            time.sleep(65)
 
     def collectMarketHistory(self, shard):
         screeps = self.getScreepsAPI()
@@ -248,7 +248,7 @@ class ScreepsMemoryStats():
 
     def clean(self, datadict):
         newdict = {}
-        for key, value in datadict.iteritems():
+        for key, value in datadict.items():
             if key == 'tick':
                 newdict[key] = int(value)
             else:
