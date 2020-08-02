@@ -190,6 +190,7 @@ class ScreepsMemoryStats():
         # stats[4233][rooms][W43S94] = {}
         date_index = time.strftime("%Y_%m")
         confirm_queue =[]
+        data_by_indices = {}
         for tick,tick_index in stats['data'].items():
             if int(tick) in self.processed_ticks[shard]:
                 continue
@@ -215,8 +216,8 @@ class ScreepsMemoryStats():
             if len(self.processed_ticks[shard]) > 100:
                 self.processed_ticks[shard].pop(0)
             for group, groupstats in tickstats.items():
-                docs = []
                 indexname = 'screeps-stats-' + group + '_' + date_index
+                docs = data_by_indices.get(indexname, [])
                 if not isinstance(groupstats, dict):
                     continue
 
@@ -247,6 +248,8 @@ class ScreepsMemoryStats():
                         "_source": savedata
                     })
                     #self.es.index(index=indexname, doc_type="stats", body=savedata)
+                data_by_indices[indexname] = docs
+            for (indexname, docs) in data_by_indices.items():
                 helpers.bulk(self.es, docs)
             confirm_queue.append(tick)
 
