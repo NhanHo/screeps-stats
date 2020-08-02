@@ -10,6 +10,7 @@ import time
 import os
 import services.screeps as screeps_service
 import sys
+from elasticsearch import helpers
 
 MAXPAGES = 200
 es_settings_dir = os.path.join(os.path.dirname(__file__), 'mappings')
@@ -35,7 +36,6 @@ class ScreepsMemoryStats():
     def run_forever(self):
         lastrun = False
         while True:
-
             api = self.getScreepsAPI()
             try:
                 shard_data = api.shard_info()['shards']
@@ -215,7 +215,7 @@ class ScreepsMemoryStats():
             if len(self.processed_ticks[shard]) > 100:
                 self.processed_ticks[shard].pop(0)
             for group, groupstats in tickstats.items():
-
+                docs = []
                 indexname = 'screeps-stats-' + group + '_' + date_index
                 if not isinstance(groupstats, dict):
                     continue
@@ -230,13 +230,24 @@ class ScreepsMemoryStats():
                         savedata['tick'] = int(tick)
                         savedata['timestamp'] = tickstats['time']
                         savedata['shard'] = shard
-                        self.es.index(index=indexname, doc_type="stats", body=savedata)
+                        docs.append({
+                            "_index": indexname,
+                            "_type": "stats",
+                            "_source": savedata
+                        })
+                        #self.es.index(index=indexname, doc_type="stats", body=savedata)
                 else:
                     savedata = self.clean(groupstats)
                     savedata['tick'] = int(tick)
                     savedata['timestamp'] = tickstats['time']
                     savedata['shard'] = shard
-                    self.es.index(index=indexname, doc_type="stats", body=savedata)
+                    docs.append({
+                        "_index": indexname,
+                        "_type": "stats",
+                        "_source": savedata
+                    })
+                    #self.es.index(index=indexname, doc_type="stats", body=savedata)
+                helpers.bulk(self.es, docs)
             confirm_queue.append(tick)
 
         self.confirm(confirm_queue, shard)
