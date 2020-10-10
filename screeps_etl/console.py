@@ -64,7 +64,7 @@ class ScreepsConsole(screepsapi.Socket):
 
         message_text.strip()
         body['message'] = message_text.replace("\t", ' ')
-        res = self.es.index(index="screeps-console-" + shard + '-' + time.strftime("%Y_%m"), doc_type="log", body=body)
+        res = self.es.index(index=self.prefix + "screeps-console-" + shard + '-' + time.strftime("%Y_%m"), doc_type="log", body=body)
 
     def process_results(self, ws, message, shard):
         body = {
@@ -72,7 +72,7 @@ class ScreepsConsole(screepsapi.Socket):
             'message': message,
             'mtype': 'results'
         }
-        res = self.es.index(index="screeps-console-" + shard + '-' + time.strftime("%Y_%m"), doc_type="log", body=body)
+        res = self.es.index(index=self.prefix + "screeps-console-" + shard + '-' + time.strftime("%Y_%m"), doc_type="log", body=body)
 
     def process_error(self, ws, message, shard):
         body = {
