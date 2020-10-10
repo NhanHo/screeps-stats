@@ -25,7 +25,8 @@ class ScreepsMemoryStats():
         self.password = p
         self.ptr = ptr
         self.processed_ticks = {}
-
+        settings = getSettings()
+        self.prefix = settings['es_prefix']
     def getScreepsAPI(self):
         if not self.__api:
             settings = getSettings()
@@ -139,7 +140,7 @@ class ScreepsMemoryStats():
 
     def saveFee(self, order):
         date_index = time.strftime("%Y_%m")
-        indexname = 'screeps-market-fees_' + date_index
+        indexname = self.prefix + '_screeps-market-fees_' + date_index
 
         if not self.es.indices.exists(indexname):
             with open('%s/fees.json' % (es_settings_dir,), 'r') as settings_file:
@@ -159,7 +160,7 @@ class ScreepsMemoryStats():
 
     def saveOrder(self, order):
         date_index = time.strftime("%Y_%m")
-        indexname = 'screeps-market-orders_' + date_index
+        indexname = self.prefix + '_screeps-market-orders_' + date_index
         if not self.es.indices.exists(indexname):
             with open('%s/orders.json' % (es_settings_dir,), 'r') as settings_file:
                 settings=settings_file.read()
@@ -216,7 +217,7 @@ class ScreepsMemoryStats():
             if len(self.processed_ticks[shard]) > 100:
                 self.processed_ticks[shard].pop(0)
             for group, groupstats in tickstats.items():
-                indexname = 'screeps-stats-' + group + '_' + date_index
+                indexname = self.prefix + '_screeps-stats-' + group + '_' + date_index
                 docs = data_by_indices.get(indexname, [])
                 if not isinstance(groupstats, dict):
                     continue

@@ -1,8 +1,8 @@
 FROM python:3.8
 MAINTAINER nhanho0105@gmail.com
-
+ARG SETTINGFILE
 COPY . /screeps-stats
-COPY .screeps_settings.yaml /screeps-stats
+COPY $SETTINGFILE /screeps-stats/.screeps_settings.yaml
 WORKDIR /screeps-stats
 RUN pip install -r requirements.txt
 ENV ELASTICSEARCH 1

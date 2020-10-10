@@ -21,6 +21,9 @@ class ScreepsConsole(screepsapi.Socket):
         self.subscribe_user('console')
         self.subscribe_user('cpu')
 
+    def set_es_prefix(self, prefix):
+        self.prefix = prefix
+
     def process_log(self, ws, message, shard):
 
         message_soup = BeautifulSoup(message,  "lxml")
@@ -99,4 +102,5 @@ if __name__ == "__main__":
     opts, args = getopt.getopt(sys.argv[1:], "hi:o:",["ifile=","ofile="])
     settings = getSettings()
     screepsconsole = ScreepsConsole(user=settings['screeps_username'], password=settings['screeps_password'], ptr=settings['screeps_ptr'], host=settings['host'], secure=settings['secure'])
+    screepsconsole.set_es_prefix(settings['es_prefix'])
     screepsconsole.start()

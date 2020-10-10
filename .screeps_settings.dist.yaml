@@ -4,3 +4,4 @@
 screeps_username: 'email@domain.tld'
 screeps_password: 'YourPasswordHere!'
 screeps_ptr: false
+es_prefix: ''
